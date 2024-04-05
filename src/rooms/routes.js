@@ -26,4 +26,15 @@ router.post("/rooms", function (req, res) {
     });
 });
 
+router.delete("/rooms/:roomId", function (req, res) {
+    rooms.Destroy({id: req.params.roomId}, function (err, data) {
+      if (err) {
+        const statusCode = constants.GRPC_STATUS_CODES[err.code];
+        res.status(statusCode).json({ error: JSON.parse(err.details) });
+      } else {
+        res.json(data);
+      }
+    });
+})
+
 module.exports = router;
