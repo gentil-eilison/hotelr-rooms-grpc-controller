@@ -1,0 +1,14 @@
+{
+  "name": "hotel_rooms_grpc_controller",
+  "version": "1.0.0",
+  "description": "Controller that implments gRPC protocol to communicate with different microsservices",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.6"
+  }
+}
