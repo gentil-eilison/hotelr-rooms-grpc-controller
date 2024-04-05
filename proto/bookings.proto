@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package hotel_rooms.bookings;
+
+import "google/protobuf/empty.proto";
+
+service BookingController {
+    rpc Create(BookingRequest) returns (BookingResponse) {}
+    rpc Destroy(BookingDestroyRequest) returns (google.protobuf.Empty) {}
+    rpc List(BookingListRequest) returns (BookingListResponse) {}
+    rpc PartialUpdate(BookingPartialUpdateRequest) returns (BookingResponse) {}
+    rpc Retrieve(BookingRetrieveRequest) returns (BookingResponse) {}
+    rpc Update(BookingRequest) returns (BookingResponse) {}
+}
+
+message BookingDestroyRequest {
+    int32 id = 1;
+}
+
+message BookingListRequest {
+}
+
+message BookingListResponse {
+    repeated BookingResponse results = 1;
+    int32 count = 2;
+}
+
+message BookingPartialUpdateRequest {
+    int32 id = 1;
+    string from_date = 2;
+    string until_date = 3;
+    double price = 4;
+    int64 room = 5;
+    int32 payment_id = 6;
+    int32 user_id = 7;
+    repeated string _partial_update_fields = 8;
+}
+
+message BookingRequest {
+    int32 id = 1;
+    string from_date = 2;
+    string until_date = 3;
+    double price = 4;
+    int64 room = 5;
+    int32 payment_id = 6;
+    int32 user_id = 7;
+}
+
+message BookingResponse {
+    int32 id = 1;
+    string from_date = 2;
+    string until_date = 3;
+    double price = 4;
+    int64 room = 5;
+    int32 payment_id = 6;
+    int32 user_id = 7;
+}
+
+message BookingRetrieveRequest {
+    int32 id = 1;
+}
+

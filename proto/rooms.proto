@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package hotel_rooms.rooms;
+
+import "google/protobuf/empty.proto";
+
+service RoomController {
+    rpc Create(RoomRequest) returns (RoomResponse) {}
+    rpc Destroy(RoomDestroyRequest) returns (google.protobuf.Empty) {}
+    rpc List(RoomListRequest) returns (RoomListResponse) {}
+    rpc PartialUpdate(RoomPartialUpdateRequest) returns (RoomResponse) {}
+    rpc Retrieve(RoomRetrieveRequest) returns (RoomResponse) {}
+    rpc Update(RoomRequest) returns (RoomResponse) {}
+}
+
+message RoomDestroyRequest {
+    int32 id = 1;
+}
+
+message RoomListRequest {
+}
+
+message RoomListResponse {
+    repeated RoomResponse results = 1;
+    int32 count = 2;
+}
+
+message RoomPartialUpdateRequest {
+    int32 id = 1;
+    bool available = 2;
+    int32 n_of_beds = 3;
+    int32 numeration = 4;
+    int32 n_of_bathrooms = 5;
+    repeated string _partial_update_fields = 6;
+}
+
+message RoomRequest {
+    int32 id = 1;
+    bool available = 2;
+    int32 n_of_beds = 3;
+    int32 numeration = 4;
+    int32 n_of_bathrooms = 5;
+}
+
+message RoomResponse {
+    int32 id = 1;
+    bool available = 2;
+    int32 n_of_beds = 3;
+    int32 numeration = 4;
+    int32 n_of_bathrooms = 5;
+}
+
+message RoomRetrieveRequest {
+    int32 id = 1;
+}
+
