@@ -35,7 +35,7 @@ router.delete("/rooms/:roomId", function (req, res) {
         res.json(data);
       }
     });
-})
+});
 
 router.put("/rooms/:roomId", function(req, res) {
     rooms.Update({id: req.params.roomId, ...req.body}, function (err, data) {
@@ -46,6 +46,6 @@ router.put("/rooms/:roomId", function(req, res) {
         res.json(data);
       }
     });
-})
+});
 
 module.exports = router;
