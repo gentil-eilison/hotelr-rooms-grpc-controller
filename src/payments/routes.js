@@ -7,7 +7,7 @@ const { isObjectEmpty } = require("../utils");
 router = Router();
 
 router.get("/payments", (req, res) => {
-  payments.List(null, (err, data) => {
+  payments.service.List(null, (err, data) => {
     if (err) {
       const statusCode = constants.GRPC_STATUS_CODES[err.code];
       res.status(statusCode).json({ error: JSON.parse(err.details) });
@@ -29,7 +29,7 @@ router.post("/payments", (req, res) => {
           const statusCode = constants.GRPC_STATUS_CODES[err.code];
           res.status(statusCode).json({ error: JSON.parse(err.details) });
         } else {
-          payments.Create(payment, (err, data) => {
+          payments.service.Create(payment, (err, data) => {
             if (err) {
               const statusCode = constants.GRPC_STATUS_CODES[err.code];
               res.status(statusCode).json({ error: JSON.parse(err.details) });
@@ -45,7 +45,7 @@ router.post("/payments", (req, res) => {
 
 router.delete("/payments/:paymentId", (req, res) => {
   const paymentId = req.params.paymentId;
-  payments.Remove({ paymentId: paymentId }, (err, data) => {
+  payments.service.Remove({ paymentId: paymentId }, (err, data) => {
     if (err) {
       const statusCode = constants.GRPC_STATUS_CODES[err.code];
       res.status(statusCode).json({ error: JSON.parse(err.details) });
