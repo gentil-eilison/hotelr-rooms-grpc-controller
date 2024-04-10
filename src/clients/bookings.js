@@ -12,6 +12,6 @@ const packageDefinition = protoLoader.loadSync('../proto/bookings.proto', {
 });
 
 const BookingController = grpc.loadPackageDefinition(packageDefinition).hotel_rooms.bookings.BookingController;
-const client = new BookingController('127.0.0.1:50052', grpc.credentials.createInsecure());
+const client = new BookingController('127.0.0.1:50051', grpc.credentials.createInsecure());
 
 module.exports = client;
