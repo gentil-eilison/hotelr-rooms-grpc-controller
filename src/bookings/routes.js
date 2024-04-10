@@ -7,7 +7,7 @@ const { isObjectEmpty } = require("../utils");
 router = Router();
 
 router.get("/bookings", function (req, res) {
-  bookings.List(null, function (err, data) {
+  bookings.service.List(null, function (err, data) {
     if (err) {
       const statusCode = constants.GRPC_STATUS_CODES[err.code];
       res.status(statusCode).json({ error: JSON.parse(err.details) });
@@ -18,7 +18,7 @@ router.get("/bookings", function (req, res) {
 });
 
 router.get("/bookings/:bookingId", function (req, res) {
-  bookings.Retrieve({ id: req.params.bookingId }, function (err, data) {
+  bookings.service.Retrieve({ id: req.params.bookingId }, function (err, data) {
     if (err) {
       const statusCode = constants.GRPC_STATUS_CODES[err.code];
       res.status(statusCode).json({ error: JSON.parse(err.details) });
@@ -34,7 +34,7 @@ router.post("/bookings", function (req, res) {
     res.status(400).json({ error: "user_id is required" });
     return;
   }
-  users.Retrieve({ id: user_id }, function (err, data) {
+  users.service.Retrieve({ id: user_id }, function (err, data) {
     if (err) {
       const statusCode = constants.GRPC_STATUS_CODES[err.code];
       res.status(statusCode).json({ error: JSON.parse(err.details) });
@@ -52,7 +52,7 @@ router.post("/bookings", function (req, res) {
 });
 
 router.put("/bookings/:bookingId", function (req, res) {
-  bookings.Update(
+  bookings.service.Update(
     { id: req.params.bookingId, ...req.body },
     function (err, data) {
       if (err) {
