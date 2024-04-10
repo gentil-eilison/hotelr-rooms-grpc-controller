@@ -1,22 +1,18 @@
-const grpc = require("@grpc/grpc-js");
-const protoLoader = require("@grpc/proto-loader");
+const Client = require("./ClientMaker");
 
-const packageDefinition = protoLoader.loadSync("../proto/rooms.proto", {
-  keepCase: true,
-  longs: String,
-  enums: String,
-  defaults: false,
-  arrays: false,
-  objects: false,
-  oneofs: false,
-});
-
-const RoomController =
-  grpc.loadPackageDefinition(packageDefinition).hotel_rooms.rooms
-    .RoomController;
-const client = new RoomController(
+const client = new Client(
+  "../proto/rooms.proto",
+  "hotel_rooms.rooms.RoomController",
   "127.0.0.1:50051",
-  grpc.credentials.createInsecure()
+  {
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: false,
+    arrays: false,
+    objects: false,
+    oneofs: false,
+  }
 );
 
 module.exports = client;
