@@ -1,16 +1,14 @@
 const { Router } = require("express");
 const bookings = require("../clients/bookings");
 const payments = require("../clients/payments");
-const constants = require("../constants");
-const { isObjectEmpty } = require("../utils");
+const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
 router = Router();
 
 router.get("/payments", (req, res) => {
   payments.service.List(null, (err, data) => {
     if (err) {
-      const statusCode = constants.GRPC_STATUS_CODES[err.code];
-      res.status(statusCode).json({ error: JSON.parse(err.details) });
+      handlegRPCRequestError(req, res, err);
     } else {
       res.json(data.results);
     }
@@ -21,34 +19,29 @@ router.post("/payments", (req, res) => {
   const payment = req.body;
   if (isObjectEmpty(payment)) {
     res.status(400).json({ error: "Payment object is empty" });
-  } else {
-    const bookingId = bookings.Retrieve(
-      { id: payment.bookingId },
-      (err, data) => {
-        if (err) {
-          const statusCode = constants.GRPC_STATUS_CODES[err.code];
-          res.status(statusCode).json({ error: JSON.parse(err.details) });
-        } else {
-          payments.service.Create(payment, (err, data) => {
-            if (err) {
-              const statusCode = constants.GRPC_STATUS_CODES[err.code];
-              res.status(statusCode).json({ error: JSON.parse(err.details) });
-            } else {
-              res.status(201).json(data.results);
-            }
-          });
-        }
-      }
-    );
+    return;
   }
+
+  bookings.service.Retrieve({ id: payment.booking_id }, (err, data) => {
+    if (err) {
+      handlegRPCRequestError(req, res, err);
+    }
+  });
+
+  payments.service.Create(payment, (err, data) => {
+    if (err) {
+      handlegRPCRequestError(req, res, err);
+    } else {
+      res.status(201).json(data);
+    }
+  });
 });
 
 router.delete("/payments/:paymentId", (req, res) => {
   const paymentId = req.params.paymentId;
   payments.service.Remove({ paymentId: paymentId }, (err, data) => {
     if (err) {
-      const statusCode = constants.GRPC_STATUS_CODES[err.code];
-      res.status(statusCode).json({ error: JSON.parse(err.details) });
+      handlegRPCRequestError(req, res, err);
     } else {
       res.status(204).json(data);
     }
