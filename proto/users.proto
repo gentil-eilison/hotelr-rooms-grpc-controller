@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package hotel_rooms_users_services.users;
+
+import "google/protobuf/empty.proto";
+
+service UserController {
+    rpc Create(UserRequest) returns (UserResponse) {}
+    rpc Destroy(UserDestroyRequest) returns (google.protobuf.Empty) {}
+    rpc List(UserListRequest) returns (UserListResponse) {}
+    rpc PartialUpdate(UserPartialUpdateRequest) returns (UserResponse) {}
+    rpc Retrieve(UserRetrieveRequest) returns (UserResponse) {}
+    rpc Update(UserRequest) returns (UserResponse) {}
+}
+
+message UserDestroyRequest {
+    int32 id = 1;
+}
+
+message UserListRequest {
+}
+
+message UserListResponse {
+    repeated UserResponse results = 1;
+    int32 count = 2;
+}
+
+message UserPartialUpdateRequest {
+    int32 id = 1;
+    string name = 2;
+    string social_security_card = 3;
+    repeated string _partial_update_fields = 4;
+}
+
+message UserRequest {
+    int32 id = 1;
+    string name = 2;
+    string social_security_card = 3;
+}
+
+message UserResponse {
+    int32 id = 1;
+    string name = 2;
+    string social_security_card = 3;
+}
+
+message UserRetrieveRequest {
+    int32 id = 1;
+}
+
