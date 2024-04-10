@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const roomsRouter = require("./rooms/routes");
 const bookingsRouter = require("./bookings/routes");
+const paymentsRouter = require("./payments/routes");
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(roomsRouter);
 app.use(bookingsRouter);
+app.use(paymentsRouter);
 
 app.listen(3000, function () {
   console.log("Controller Service running on port 3000");

@@ -1,7 +1,7 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
 
-const packageDefinition = protoLoader.loadSync("../proto/users.proto", {
+const packageDefinition = protoLoader.loadSync("../proto/payments.proto", {
   keepCase: true,
   longs: String,
   enums: String,
@@ -11,11 +11,10 @@ const packageDefinition = protoLoader.loadSync("../proto/users.proto", {
   oneofs: false,
 });
 
-const UserController =
-  grpc.loadPackageDefinition(packageDefinition).hotel_rooms_users_services.users
-    .UserController;
-const client = new UserController(
-  "127.0.0.1:50052",
+const PaymentController =
+  grpc.loadPackageDefinition(packageDefinition).payment.PaymentService;
+const client = new PaymentController(
+  "127.0.0.1:50053",
   grpc.credentials.createInsecure()
 );
 

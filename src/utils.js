@@ -1,8 +1,8 @@
 function isObjectEmpty(obj) {
-    if (typeof obj === 'object') {
-        return obj.keys().length === 0;
-    }
-    return false;
+  if (typeof obj === "object") {
+    return Object.keys(obj).length === 0;
+  }
+  return false;
 }
 
-module.exports = { isObjectEmpty: isObjectEmpty}
+module.exports = { isObjectEmpty: isObjectEmpty };
