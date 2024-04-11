@@ -10,7 +10,7 @@ router.get("/payments", (req, res) => {
     if (err) {
       handlegRPCRequestError(req, res, err);
     } else {
-      res.json(data.results);
+      res.json(data);
     }
   });
 });
@@ -19,20 +19,49 @@ router.post("/payments", (req, res) => {
   const payment = req.body;
   if (isObjectEmpty(payment)) {
     res.status(400).json({ error: "Payment object is empty" });
-    return;
   }
 
-  bookings.service.Retrieve({ id: payment.booking_id }, (err, data) => {
-    if (err) {
-      handlegRPCRequestError(req, res, err);
-    }
-  });
-
-  payments.service.Create(payment, (err, data) => {
+  bookings.service.Retrieve({ id: payment.bookingId }, (err, data) => {
     if (err) {
       handlegRPCRequestError(req, res, err);
     } else {
-      res.status(201).json(data);
+      payments.service.Insert(payment, (err, data) => {
+        if (err) {
+          handlegRPCRequestError(req, res, err);
+        } else {
+          res.status(201).json(data);
+        }
+      });
+    }
+  });
+});
+
+router.put("/payments/:paymentId", (req, res) => {
+  const paymentId = req.params.paymentId;
+  const payment = req.body;
+  if (isObjectEmpty(payment)) {
+    res.status(400).json({ error: "Payment object is empty" });
+  } else {
+    payments.service.Update(
+      { paymentId: paymentId, ...payment },
+      (err, data) => {
+        if (err) {
+          handlegRPCRequestError(req, res, err);
+        } else {
+          res.status(200).json(data);
+        }
+      }
+    );
+  }
+});
+
+router.get("/payments/:paymentId", (req, res) => {
+  const paymentId = req.params.paymentId;
+  payments.service.Find({ paymentId: paymentId }, (err, data) => {
+    if (err) {
+      handlegRPCRequestError(req, res, err);
+    } else {
+      res.status(200).json(data);
     }
   });
 });
@@ -43,7 +72,7 @@ router.delete("/payments/:paymentId", (req, res) => {
     if (err) {
       handlegRPCRequestError(req, res, err);
     } else {
-      res.status(204).json(data);
+      res.status(204).json({ message: "Payment successfully deleted." });
     }
   });
 });
