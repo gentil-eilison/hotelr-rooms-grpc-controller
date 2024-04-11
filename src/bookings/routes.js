@@ -2,6 +2,8 @@ const { Router } = require("express");
 const bookings = require("../clients/bookings");
 const rooms = require("../clients/rooms");
 const users = require("../clients/users");
+const payments = require("../clients/payments");
+const creditCards = require("../clients/credit_card");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
 const router = Router();
@@ -38,34 +40,61 @@ router.post("/bookings", function (req, res) {
     return;
   }
 
-  users.service.Retrieve({ id: user_id }, (err, data) => {
+  users.service.Retrieve({ id: user_id }, (err, userData) => {
     if (err) {
       handlegRPCRequestError(req, res, err);
-    }
-  });
-
-  rooms.service.Retrieve({ id: req.body.room }, (err, roomData) => {
-    if (err) {
-      handlegRPCRequestError(req, res, err);
-    }
-    if (!roomData.available) {
-      res.status(400).json({ error: "Room not available" });
-      return;
     } else {
-      bookings.service.Create(req.body, function (err, data) {
+      rooms.service.Retrieve({ id: req.body.room }, (err, roomData) => {
         if (err) {
           handlegRPCRequestError(req, res, err);
+        }
+        if (!roomData.available) {
+          res.status(400).json({ error: "Room not available" });
+          return;
         } else {
-          rooms.service.Update(
-            { id: req.body.room, ...roomData, available: true },
-            (err, data) => {
-              if (err) {
-                handlegRPCRequestError(req, res, err);
-              } else {
-                res.status(201).json(data);
-              }
+          bookings.service.Create(req.body, function (err, bookingData) {
+            if (err) {
+              handlegRPCRequestError(req, res, err);
+            } else {
+              rooms.service.Update(
+                { id: req.body.room, ...roomData, available: false },
+                (err, updatedRoomData) => {
+                  if (err) {
+                    handlegRPCRequestError(req, res, err);
+                  } else {
+                    creditCards.service.List(null, function (err, cardsData) {
+                      if (err) {
+                        handlegRPCRequestError(req, res, err);
+                      } else {
+                        const userCreditCard = cardsData.results.find(
+                          (card) => card.owner == userData.id
+                        );
+                        if (!userCreditCard) {
+                          res.status(400).json({
+                            error: "User does not have a credit card",
+                          });
+                          return;
+                        }
+                        payments.service.Insert(
+                          {
+                            bookingId: bookingData.id,
+                            creditCardId: userCreditCard.id,
+                          },
+                          function (err, paymentData) {
+                            if (err) {
+                              handlegRPCRequestError(req, res, err);
+                            } else {
+                              res.status(201).json(bookingData);
+                            }
+                          }
+                        );
+                      }
+                    });
+                  }
+                }
+              );
             }
-          );
+          });
         }
       });
     }

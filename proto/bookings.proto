@@ -31,7 +31,6 @@ message BookingPartialUpdateRequest {
     string until_date = 3;
     double price = 4;
     int64 room = 5;
-    int32 payment_id = 6;
     int32 user_id = 7;
     repeated string _partial_update_fields = 8;
 }
@@ -42,7 +41,6 @@ message BookingRequest {
     string until_date = 3;
     double price = 4;
     int64 room = 5;
-    int32 payment_id = 6;
     int32 user_id = 7;
 }
 
@@ -52,7 +50,6 @@ message BookingResponse {
     string until_date = 3;
     double price = 4;
     int64 room = 5;
-    int32 payment_id = 6;
     int32 user_id = 7;
 }
 
