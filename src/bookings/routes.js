@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const bookings = require("../clients/bookings");
+const rooms = require("../clients/rooms");
 const users = require("../clients/users");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
@@ -43,11 +44,30 @@ router.post("/bookings", function (req, res) {
     }
   });
 
-  bookings.service.Create(req.body, function (err, data) {
+  rooms.service.Retrieve({ id: req.body.room }, (err, roomData) => {
     if (err) {
       handlegRPCRequestError(req, res, err);
+    }
+    if (!roomData.available) {
+      res.status(400).json({ error: "Room not available" });
+      return;
     } else {
-      res.status(201).json(data);
+      bookings.service.Create(req.body, function (err, data) {
+        if (err) {
+          handlegRPCRequestError(req, res, err);
+        } else {
+          rooms.service.Update(
+            { id: req.body.room, ...roomData, available: true },
+            (err, data) => {
+              if (err) {
+                handlegRPCRequestError(req, res, err);
+              } else {
+                res.status(201).json(data);
+              }
+            }
+          );
+        }
+      });
     }
   });
 });

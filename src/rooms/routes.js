@@ -55,7 +55,7 @@ router.put("/rooms/:roomId", function (req, res) {
     return;
   }
 
-  rooms.client.Update(
+  rooms.service.Update(
     { id: req.params.roomId, ...req.body },
     function (err, data) {
       if (err) {
