@@ -3,7 +3,7 @@ const bookings = require("../clients/bookings");
 const users = require("../clients/users");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
-router = Router();
+const router = Router();
 
 router.get("/bookings", function (req, res) {
   bookings.service.List(null, function (err, data) {
@@ -47,7 +47,7 @@ router.post("/bookings", function (req, res) {
     if (err) {
       handlegRPCRequestError(req, res, err);
     } else {
-      res.status(201).json(data.results);
+      res.status(201).json(data);
     }
   });
 });

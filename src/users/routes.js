@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const users = require("../clients/users");
+const bookings = require("../clients/bookings");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
 const router = Router();
@@ -55,7 +56,20 @@ router.delete("/users/:userId", function (req, res) {
     if (err) {
       handlegRPCRequestError(req, res, err);
     } else {
-      res.status(204).json(data);
+      bookings.service.List(null, function (err, bookingsResponse) {
+        if (err) {
+          handlegRPCRequestError(req, res, err);
+        }
+        bookingsResponse.results.forEach((booking) => {
+          if (booking.user_id == req.params.userId) {
+            bookings.service.Destroy(
+              { id: booking.id },
+              function (err, data) {}
+            );
+          }
+        });
+        res.status(204).json(data);
+      });
     }
   });
 });

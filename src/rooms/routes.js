@@ -2,7 +2,7 @@ const { Router } = require("express");
 const rooms = require("../clients/rooms");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
-router = Router();
+const router = Router();
 
 router.get("/rooms", function (req, res) {
   rooms.service.List(null, function (err, data) {
