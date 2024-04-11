@@ -3,7 +3,7 @@ const bookings = require("../clients/bookings");
 const payments = require("../clients/payments");
 const { isObjectEmpty, handlegRPCRequestError } = require("../utils");
 
-router = Router();
+const router = Router();
 
 router.get("/payments", (req, res) => {
   payments.service.List(null, (err, data) => {
