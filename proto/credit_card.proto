@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package hotel_rooms_users_services.credit_card;
+
+import "google/protobuf/empty.proto";
+
+service CreditCardController {
+    rpc Create(CreditCardRequest) returns (CreditCardResponse) {}
+    rpc Destroy(CreditCardDestroyRequest) returns (google.protobuf.Empty) {}
+    rpc List(CreditCardListRequest) returns (CreditCardListResponse) {}
+    rpc PartialUpdate(CreditCardPartialUpdateRequest) returns (CreditCardResponse) {}
+    rpc Retrieve(CreditCardRetrieveRequest) returns (CreditCardResponse) {}
+    rpc Update(CreditCardRequest) returns (CreditCardResponse) {}
+}
+
+message CreditCardDestroyRequest {
+    int32 id = 1;
+}
+
+message CreditCardListRequest {
+}
+
+message CreditCardListResponse {
+    repeated CreditCardResponse results = 1;
+    int32 count = 2;
+}
+
+message CreditCardPartialUpdateRequest {
+    int32 id = 1;
+    string number = 2;
+    string due_date = 3;
+    int64 owner = 4;
+    string cvv = 5;
+    repeated string _partial_update_fields = 6;
+}
+
+message CreditCardRequest {
+    int32 id = 1;
+    string number = 2;
+    string due_date = 3;
+    int64 owner = 4;
+    string cvv = 5;
+}
+
+message CreditCardResponse {
+    int32 id = 1;
+    string number = 2;
+    string due_date = 3;
+    int64 owner = 4;
+    string cvv = 5;
+}
+
+message CreditCardRetrieveRequest {
+    int32 id = 1;
+}
+

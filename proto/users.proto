@@ -30,18 +30,21 @@ message UserPartialUpdateRequest {
     string name = 2;
     string social_security_card = 3;
     repeated string _partial_update_fields = 4;
+    string contact = 5;
 }
 
 message UserRequest {
     int32 id = 1;
     string name = 2;
     string social_security_card = 3;
+    string contact = 4;
 }
 
 message UserResponse {
     int32 id = 1;
     string name = 2;
     string social_security_card = 3;
+    string contact = 4;
 }
 
 message UserRetrieveRequest {
