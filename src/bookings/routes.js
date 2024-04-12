@@ -78,7 +78,7 @@ router.post("/bookings", function (req, res) {
                         payments.service.Insert(
                           {
                             bookingId: bookingData.id,
-                            creditCardId: userCreditCard.id,
+                            creditCardId: userCreditCard.id
                           },
                           function (err, paymentData) {
                             if (err) {

@@ -3,7 +3,7 @@ const Client = require("./ClientMaker");
 const client = new Client(
   "../proto/rooms.proto",
   "hotel_rooms.rooms.RoomController",
-  "127.0.0.1:50051",
+  "127.0.0.1:50054",
   {
     keepCase: true,
     longs: String,
